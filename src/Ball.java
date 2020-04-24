@@ -6,6 +6,14 @@ import java.awt.*;
  */
 
 public class Ball {
+	private double cx;
+	private double cy;
+	private double width;
+	private double height;
+	private Color color;
+	private double baseSpeed;
+	private double xSpeed;
+	private double ySpeed;
 
 	/**
 	 * Construtor da classe Ball. Observe que quem invoca o construtor desta classe
@@ -24,7 +32,14 @@ public class Ball {
 	 */
 
 	public Ball(double cx, double cy, double width, double height, Color color, double speed) {
-
+		this.cx = cx;
+		this.cy = cy;
+		this.width = width;
+		this.height = height;
+		this.color = color;
+		this.baseSpeed = speed;
+		this.xSpeed = speed;
+		this.ySpeed = speed;
 	}
 
 	/**
@@ -32,9 +47,8 @@ public class Ball {
 	 */
 
 	public void draw() {
-
-		GameLib.setColor(Color.YELLOW);
-		GameLib.fillRect(400, 300, 20, 20);
+		GameLib.setColor(this.color);
+		GameLib.fillRect(this.cx, this.cy, this.width, this.height);
 	}
 
 	/**
@@ -45,7 +59,8 @@ public class Ball {
 	 */
 
 	public void update(long delta) {
-
+		this.cx += this.xSpeed * delta / 2;
+		this.cy += this.ySpeed * delta / 2;
 	}
 
 	/**
@@ -55,7 +70,7 @@ public class Ball {
 	 */
 
 	public void onPlayerCollision(String playerId) {
-
+		this.xSpeed *= -1;
 	}
 
 	/**
@@ -65,7 +80,11 @@ public class Ball {
 	 */
 
 	public void onWallCollision(String wallId) {
-
+		if (wallId == "Top" || wallId == "Bottom") {
+			this.ySpeed *= -1;
+		} else {
+			this.xSpeed *= -1;
+		}
 	}
 
 	/**
@@ -78,8 +97,16 @@ public class Ball {
 	 */
 
 	public boolean checkCollision(Wall wall) {
+		double topWall = wall.getCy() + (wall.getHeight() / 2);
+		double bottomWall = wall.getCy() - (wall.getHeight() / 2);
+		double rightWall = wall.getCx() + (wall.getWidth() / 2);
+		double leftWall = wall.getCx() - (wall.getWidth() / 2);
 
-		return false;
+		if ((this.cy >= bottomWall && this.cy <= topWall) && (this.cx >= leftWall && this.cx <= rightWall)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -92,8 +119,16 @@ public class Ball {
 	 */
 
 	public boolean checkCollision(Player player) {
+		double topBorder = player.getCy() - (player.getHeight() / 2);
+		double bottomBorder = player.getCy() + (player.getHeight() / 2);
+		double rightBorder = player.getCx() + (player.getWidth() / 2);
+		double leftBorder = player.getCx() - (player.getWidth() / 2);
 
-		return false;
+		if ((this.cy >= topBorder && this.cy <= bottomBorder) && (this.cx >= leftBorder && this.cx <= rightBorder)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -104,8 +139,7 @@ public class Ball {
 	 */
 
 	public double getCx() {
-
-		return 400;
+		return this.cx;
 	}
 
 	/**
@@ -116,8 +150,7 @@ public class Ball {
 	 */
 
 	public double getCy() {
-
-		return 300;
+		return this.cy;
 	}
 
 	/**
@@ -128,8 +161,6 @@ public class Ball {
 	 */
 
 	public double getSpeed() {
-
-		return 0;
+		return this.baseSpeed;
 	}
-
 }
