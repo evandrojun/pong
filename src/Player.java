@@ -6,27 +6,41 @@ import java.awt.*;
  */
 
 public class Player {
+	private double cx;
+	private double cy;
+	private double width;
+	private double height;
+	private Color color;
+	private String id;
+	private double[] verticalLimit;
+	private double speed;
 
 	/**
 	 * Construtor da classe Player.
 	 *
-	 * @param cx      coordenada x da posição inicial do player (centro do retangulo
-	 *                que o representa).
-	 * @param cy      coordenada y da posição inicial do player (centro do retangulo
-	 *                que o representa).
-	 * @param width   largura do retangulo que representa o player.
-	 * @param height  altura do retangulo que representa o player.
-	 * @param color   cor do player.
-	 * @param id      uma string que identifica o player
-	 * @param v_limit um array de double contendo dois valores (em pixels) que
-	 *                determinam os limites verticais da área útil da quadra.
-	 * @param speed   velocidade do movimento vertical do player (em pixels por
-	 *                millisegundo).
+	 * @param cx            coordenada x da posição inicial do player (centro do
+	 *                      retangulo que o representa).
+	 * @param cy            coordenada y da posição inicial do player (centro do
+	 *                      retangulo que o representa).
+	 * @param width         largura do retangulo que representa o player.
+	 * @param height        altura do retangulo que representa o player.
+	 * @param color         cor do player.
+	 * @param id            uma string que identifica o player
+	 * @param verticalLimit um array de double contendo dois valores (em pixels) que
+	 *                      determinam os limites verticais da área útil da quadra.
+	 * @param speed         velocidade do movimento vertical do player (em pixels
+	 *                      por millisegundo).
 	 */
 
-	public Player(double cx, double cy, double width, double height, Color color, String id, double[] v_limit,
-			double speed) {
-
+	public Player(double cx, double cy, double width, double height, Color color, String id, double[] verticalLimit, double speed) {
+		this.cx = cx;
+		this.cy = cy;
+		this.width = width;
+		this.height = height;
+		this.color = color;
+		this.id = id;
+		this.verticalLimit = verticalLimit;
+		this.speed = speed;
 	}
 
 	/**
@@ -34,9 +48,8 @@ public class Player {
 	 */
 
 	public void draw() {
-
-		GameLib.setColor(Color.GREEN);
-		GameLib.fillRect(80, 300, 20, 100);
+		GameLib.setColor(this.color);
+		GameLib.fillRect(this.cx, this.cy, this.width, this.height);
 	}
 
 	/**
@@ -49,7 +62,9 @@ public class Player {
 	 */
 
 	public void moveUp(long delta) {
-
+		if ((this.cy - (this.height / 2)) > this.verticalLimit[0]) {
+			this.cy -= delta * speed;
+		}
 	}
 
 	/**
@@ -62,7 +77,9 @@ public class Player {
 	 */
 
 	public void moveDown(long delta) {
-
+		if ((this.cy + (this.height / 2)) < this.verticalLimit[1]) {
+			this.cy += delta * speed;
+		}
 	}
 
 	/**
@@ -72,8 +89,7 @@ public class Player {
 	 */
 
 	public String getId() {
-
-		return "";
+		return this.id;
 	}
 
 	/**
@@ -83,8 +99,7 @@ public class Player {
 	 */
 
 	public double getWidth() {
-
-		return 20;
+		return this.width;
 	}
 
 	/**
@@ -94,8 +109,7 @@ public class Player {
 	 */
 
 	public double getHeight() {
-
-		return 100;
+		return this.height;
 	}
 
 	/**
@@ -106,8 +120,7 @@ public class Player {
 	 */
 
 	public double getCx() {
-
-		return 80;
+		return this.cx;
 	}
 
 	/**
@@ -118,7 +131,6 @@ public class Player {
 	 */
 
 	public double getCy() {
-
-		return 300;
+		return this.cy;
 	}
 }
